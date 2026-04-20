@@ -1,29 +1,39 @@
-import React, { useState } from "react";
-import { View, TextInput, StyleSheet } from "react-native";
+// ─── SearchBar Component ──────────────────────────────────────────────────────
 
-export default function SearchBar() {
-  const [query, setQuery] = useState("");
+import { Ionicons } from '@expo/vector-icons';
+import React, { memo } from 'react';
+import { Pressable, TextInput, View } from 'react-native';
 
-  return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Search..."
-        value={query}
-        onChangeText={setQuery}
-        style={styles.input}
-      />
-    </View>
-  );
+interface SearchBarProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    marginTop: 50,
-  },
-  input: {
-    backgroundColor: "#eee",
-    padding: 10,
-    borderRadius: 10,
-  },
+const SearchBar = memo(({ value, onChangeText, placeholder = 'Search food...' }: SearchBarProps) => {
+  return (
+    <View className="flex-row items-center bg-white rounded-2xl px-4 py-3 shadow-sm"
+      style={{ shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 12, elevation: 3 }}>
+      <Ionicons name="search-outline" size={20} color="#9CA3AF" />
+      <TextInput
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor="#9CA3AF"
+        className="flex-1 ml-3 text-gray-800 text-base"
+        style={{ fontFamily: 'System' }}
+        returnKeyType="search"
+        autoCorrect={false}
+      />
+      {value.length > 0 && (
+        <Pressable onPress={() => onChangeText('')} hitSlop={8}>
+          <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+        </Pressable>
+      )}
+    </View>
+  );
 });
+
+SearchBar.displayName = 'SearchBar';
+
+export default SearchBar;
